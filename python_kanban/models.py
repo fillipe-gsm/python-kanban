@@ -25,5 +25,13 @@ class Todo(pw.Model):
     def promote(self):
         """Move the status forward. A 'done' status cannot be moved further"""
         last_status = self.CHOICES[-1][0]
-        self.status = min(last_status, self.status + 1)
+        if self.status < last_status:
+            self.status += 1
+            self.updated = datetime.now()
+            self.save()
+
+    def regress(self):
+        """Move the status backwards. A 'to do' status cannot be moved back"""
+        first_status = self.CHOICES[0][0]
+        self.status = max(first_status, self.status - 1)
         self.save()
