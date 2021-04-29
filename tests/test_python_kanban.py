@@ -55,25 +55,41 @@ class TestPromote:
         todo = Todo.create(title="Thing to do", status=Todo.CHOICES[-1][0])
         old_updated_time = todo.updated
 
-        todo.promote()  # go to next level
+        todo.promote()
 
         assert old_updated_time == todo.updated
 
 
-def test_regress_decreases_todo_status():
-    todo = Todo.create(title="Thing to do", status=1)
-    assert todo.status == todo.CHOICES[1][0]
+class TestRegress:
+    def test_regress_decreases_todo_status(self):
+        todo = Todo.create(title="Thing to do", status=1)
+        assert todo.status == todo.CHOICES[1][0]
 
-    todo.regress()
+        todo.regress()
 
-    assert todo.status == todo.CHOICES[0][0]
+        assert todo.status == todo.CHOICES[0][0]
 
+    def test_regress_cannot_go_more_backwards_than_todo(self):
+        """An "to do" todo cannot be regressed back"""
+        todo = Todo.create(title="Thing to do")
+        assert todo.status == todo.CHOICES[0][0]
 
-def test_regress_cannot_go_more_backwards_than_todo():
-    """An "to do" todo cannot be regressed back"""
-    todo = Todo.create(title="Thing to do")
-    assert todo.status == todo.CHOICES[0][0]
+        todo.regress()
 
-    todo.regress()
+        assert todo.status == todo.CHOICES[0][0]
 
-    assert todo.status == todo.CHOICES[0][0]
+    def test_regress_updates_updated_time_if_todo_is_regressed(self):
+        todo = Todo.create(title="Thing to do", status=1)
+        old_updated_time = todo.updated
+
+        todo.regress()
+
+        assert old_updated_time < todo.updated
+
+    def test_regress_keeps_updated_time_if_at_first_status(self):
+        todo = Todo.create(title="Thing to do")
+        old_updated_time = todo.updated
+
+        todo.regress()
+
+        assert old_updated_time == todo.updated

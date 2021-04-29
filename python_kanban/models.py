@@ -33,5 +33,7 @@ class Todo(pw.Model):
     def regress(self):
         """Move the status backwards. A 'to do' status cannot be moved back"""
         first_status = self.CHOICES[0][0]
-        self.status = max(first_status, self.status - 1)
-        self.save()
+        if self.status > first_status:
+            self.status -= 1
+            self.updated = datetime.now()
+            self.save()
