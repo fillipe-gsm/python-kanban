@@ -1,17 +1,10 @@
 from prompt_toolkit.application import Application
-from prompt_toolkit.buffer import Buffer
 from prompt_toolkit.formatted_text import HTML, merge_formatted_text
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout.containers import HSplit, VSplit, Window
 from prompt_toolkit.layout.controls import FormattedTextControl
 from prompt_toolkit.layout.layout import Layout
 from prompt_toolkit.widgets import Label
-
-
-# Buffers
-todo_buffer = Buffer()
-inprogress_buffer = Buffer()
-done_buffer = Buffer()
 
 
 class TodoContainer:
