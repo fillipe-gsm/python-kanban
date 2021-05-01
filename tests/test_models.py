@@ -1,3 +1,5 @@
+from datetime import date
+
 import peewee as pw
 import pytest
 
@@ -93,3 +95,54 @@ class TestRegress:
         todo.regress()
 
         assert old_updated_time == todo.updated
+
+
+def test_list_todos():
+    """"""
+    # Create a list of todos with different statuses and updated times
+    CHOICES = Todo.CHOICES
+    todos = [
+        # Todos in status "todo": notice the second is more recent
+        Todo.create(
+            title="Task 1: todo",
+            status=CHOICES[0][0],
+            updated=date(2021, 1, 1),
+        ),
+        Todo.create(
+            title="Task 2: todo",
+            status=CHOICES[0][0],
+            updated=date(2021, 1, 2),
+        ),
+        # Todos in status "in progress"
+        Todo.create(
+            title="Task 3: in progress",
+            status=CHOICES[1][0],
+            updated=date(2021, 2, 1),
+        ),
+        Todo.create(
+            title="Task 4: in progress",
+            status=CHOICES[1][0],
+            updated=date(2021, 2, 2),
+        ),
+        # Todos in status "done"
+        Todo.create(
+            title="Task 5: done",
+            status=CHOICES[2][0],
+            updated=date(2021, 3, 1),
+        ),
+        Todo.create(
+            title="Task 6: done",
+            status=CHOICES[2][0],
+            updated=date(2021, 3, 2),
+        ),
+    ]
+
+    expected = {
+        CHOICES[0][0]: [todos[1], todos[0]],
+        CHOICES[1][0]: [todos[3], todos[2]],
+        CHOICES[2][0]: [todos[5], todos[4]],
+    }
+
+    todos_dict = Todo.group_todos_per_status()
+
+    assert todos_dict == expected
