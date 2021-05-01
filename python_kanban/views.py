@@ -1,3 +1,5 @@
+from typing import List
+
 from prompt_toolkit.application import Application
 from prompt_toolkit.formatted_text import HTML, merge_formatted_text
 from prompt_toolkit.key_binding import KeyBindings
@@ -6,9 +8,11 @@ from prompt_toolkit.layout.controls import FormattedTextControl
 from prompt_toolkit.layout.layout import Layout
 from prompt_toolkit.widgets import Label
 
+from python_kanban.models import Todo
+
 
 class TodoContainer:
-    def __init__(self, entries):
+    def __init__(self, entries: List[Todo]):
         self.entries = entries
         self.selected_line = 0
         self.container = Window(
@@ -27,7 +31,7 @@ class TodoContainer:
         for i, entry in enumerate(self.entries):
             if i == self.selected_line:
                 result.append([("[SetCursorPosition]", "")])
-            result.append(entry)
+            result.append(entry.title)
             result.append("\n")
 
         return merge_formatted_text(result)
@@ -44,6 +48,15 @@ class TodoContainer:
         @kb.add("down")
         def _go_down(event) -> None:
             self.selected_line = (self.selected_line + 1) % len(self.entries)
+
+        @kb.add("p")
+        def _promote(event) -> None:
+            self.entries[self.selected_line].promote()
+            # TODO: add the real app and reload everything
+
+        @kb.add("r")
+        def _regress(event) -> None:
+            self.entries[self.selected_line].regress()
 
         return kb
 
