@@ -1,7 +1,7 @@
-from typing import List
+from typing import List, Optional
 
 from prompt_toolkit.application import Application
-from prompt_toolkit.formatted_text import HTML, merge_formatted_text
+from prompt_toolkit.formatted_text import merge_formatted_text
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout.containers import HSplit, VSplit, Window
 from prompt_toolkit.layout.controls import FormattedTextControl
@@ -12,7 +12,9 @@ from python_kanban.models import Todo
 
 
 class TodoContainer:
-    def __init__(self, entries: List[Todo]):
+    def __init__(
+        self, entries: List[Todo], app: Optional["TodoApplication"] = None
+    ):
         self.entries = entries
         self.selected_line = 0
         self.container = Window(
@@ -25,6 +27,7 @@ class TodoContainer:
             dont_extend_height=True,
             cursorline=True,
         )
+        self.app = app
 
     def _get_formatted_text(self):
         result = []
@@ -52,11 +55,14 @@ class TodoContainer:
         @kb.add("p")
         def _promote(event) -> None:
             self.entries[self.selected_line].promote()
-            # TODO: add the real app and reload everything
+            if self.app:
+                self.app.load_list_view()
 
         @kb.add("r")
         def _regress(event) -> None:
             self.entries[self.selected_line].regress()
+            if self.app:
+                self.app.load_list_view()
 
         return kb
 
@@ -64,43 +70,59 @@ class TodoContainer:
         return self.container
 
 
-class UserInterface:
+class TodoApplication(Application):
     def __init__(self):
+        super().__init__(
+            layout=self._list_view(),
+            key_bindings=self._get_key_bindings(),
+            full_screen=True,
+        )
+        self.current_focus = 0
+        self._set_list_focus()
 
-        # Layout
-        todo_list = [
-            HTML("<bold>Task 1</bold> Dar o cu"),
-            HTML("<bold>Task 2</bold> Dar o cu"),
-            HTML("<bold>Task 3</bold> Dar o cu"),
-        ]
-        todo_window = HSplit([
-            Label("To do"),
-            Window(height=1, char="-", style="class:line"),
-            TodoContainer(todo_list),
-        ])
-        inprogress_window = HSplit([
-            Label("In progress"),
-            Window(height=1, char="-", style="class:line"),
-            TodoContainer(todo_list),
-        ])
-        done_window = HSplit([
-            Label("Done"),
-            Window(height=1, char="-", style="class:line"),
-            TodoContainer(todo_list),
-        ])
+    def load_list_view(self):
+        """Called to reload the list view"""
+        self.layout = self._list_view()
+        self._set_list_focus()
 
+    def _set_list_focus(self):
+        """
+        In cases a window becomes empty after promoting or regressing too many
+        todos, the focus should be shifted to the first with non-empty entries.
+        If there is no entry at all, focus on the whole window.
+        """
+
+        if not self.todos_dict[self.current_focus]:
+            self.current_focus = next(
+                (i for i, todos in self.todos_dict.items() if todos), 0
+            )
+
+        self.layout.focus(self.windows[self.current_focus])
+
+    def _list_view(self):
+        """List view
+        Shows all current todos grouped by statuses
+        """
+
+        todos_dict = Todo.group_todos_per_status()
         self.windows = [
-            todo_window,
-            inprogress_window,
-            done_window,
+            HSplit(
+                [
+                    Label(Todo.CHOICES[status][1]),
+                    Window(height=1, char="-", style="class:line"),
+                    TodoContainer(todos, app=self),
+                ]
+            )
+            for status, todos in todos_dict.items()
         ]
 
         body = VSplit(self.windows)
-        self.root_container = HSplit([body])
-        self.current_focus = 0
-        self._set_key_bindings()
+        root_container = HSplit([body])
+        self.todos_dict = todos_dict
+        # return Layout(root_container, focused_element=self.windows[0])
+        return Layout(root_container)
 
-    def _set_key_bindings(self):
+    def _get_key_bindings(self):
         # Global Key bindings
         kb = KeyBindings()
 
@@ -112,29 +134,32 @@ class UserInterface:
         @kb.add("l")
         @kb.add("right")
         def next(event):
-            """"""
-            self.current_focus = min(
-                len(self.windows) - 1, self.current_focus + 1
-            )
+            """Move to next window WITH non-empty todos"""
+            self.current_focus = self._next_non_empty_window()
             event.app.layout.focus(self.windows[self.current_focus])
 
         @kb.add("h")
         @kb.add("left")
         def previous(event):
             """"""
-            self.current_focus = max(0, self.current_focus - 1)
+            self.current_focus = self._previous_non_empty_window()
             event.app.layout.focus(self.windows[self.current_focus])
 
-        self.kb = kb
+        return kb
+
+    def _next_non_empty_window(self):
+        for i in range(self.current_focus + 1, len(self.windows)):
+            if self.todos_dict[i]:
+                return i
+
+        return self.current_focus
+
+    def _previous_non_empty_window(self):
+        for i in range(self.current_focus - 1, -1, -1):
+            if self.todos_dict[i]:
+                return i
+
+        return self.current_focus
 
 
-interface = UserInterface()
-
-# Glues the whole app
-application = Application(
-    layout=Layout(
-        interface.root_container, focused_element=interface.windows[0]
-    ),
-    key_bindings=interface.kb,
-    full_screen=True,
-)
+application = TodoApplication()
