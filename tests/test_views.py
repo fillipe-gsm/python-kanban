@@ -155,7 +155,7 @@ class TestTodoContainer:
         assert container.entries[2].status == Todo.CHOICES[0][0]
 
 
-class TestTodoApplication:
+class TestTodoApplicationListView:
     def test_list_view_has_proper_num_windows(self, todo_entries2):
         """"""
         app = TodoApplication()
@@ -233,7 +233,7 @@ class TestTodoApplication:
 
         assert app.current_focus == 1
 
-        # Press `l` to move left again
+        # Press `h` to move left again
         processor = KeyProcessor(app.key_bindings)
         processor.feed(KeyPress("h"))
         processor.process_keys()
