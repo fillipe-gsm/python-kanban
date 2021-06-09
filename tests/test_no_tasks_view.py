@@ -28,7 +28,7 @@ def test_keybinding_add_task():
 
 def test_keybinding_quit():
     """
-    When 'q' is pressed, check if the `exit` method was caleld
+    When 'q' is pressed, check if the `exit` method was called
     """
 
     mocked_app = Mock()
