@@ -1,5 +1,6 @@
 """Script to test my views visually"""
 from prompt_toolkit.application import Application
+from prompt_toolkit.shortcuts import message_dialog
 
 from python_kanban.views.add_task_view import AddTaskView
 
@@ -15,6 +16,10 @@ class TodoApplication(Application):
 
     def load_add_task_view(self):
         self.exit()
+
+    def raise_error_dialog(self, title: str, text: str):
+        error_dialog = message_dialog(title=title, text=text)
+        self.layout = error_dialog.layout
 
 
 if __name__ == "__main__":
