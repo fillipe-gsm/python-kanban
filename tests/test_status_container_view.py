@@ -87,3 +87,19 @@ def test_status_container_regress_todo(todo_entries):
     assert container.entries[0].status == Todo.CHOICES[1][0]
     assert container.entries[1].status == Todo.CHOICES[0][0]
     assert container.entries[2].status == Todo.CHOICES[0][0]
+
+
+def test_d_deletes_todo(todo_entries):
+
+    container = StatusContainer(todo_entries)
+
+    assert Todo.select().count() == len(todo_entries)
+
+    # Delete first task
+    processor = KeyProcessor(container.container.get_key_bindings())
+    processor.feed(KeyPress("d"))
+    processor.process_keys()
+
+    todos = Todo.select()
+    assert todos.count() == len(todo_entries) - 1
+    assert todo_entries[0] not in todos

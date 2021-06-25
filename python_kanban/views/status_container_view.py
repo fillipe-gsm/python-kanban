@@ -72,6 +72,13 @@ class StatusContainer:
                     initial_container_focus=todo.status
                 )
 
+        @kb.add("d")
+        def delete(event):
+            todo = self.entries[self.selected_line]
+            todo.delete_instance()
+            if self.app:
+                self.app.load_list_tasks_view()
+
         return kb
 
     def __pt_container__(self):

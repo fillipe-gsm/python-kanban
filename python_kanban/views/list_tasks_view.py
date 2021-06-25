@@ -12,6 +12,12 @@ from python_kanban.views.status_container_view import StatusContainer
 
 
 class ListTasksView:
+    HELP_TEXT = (
+        "Navigate along tasks with h, j, k, l or usual navigation keys. "
+        "Press \"p\" to promote a task and \"r\" to regress it. "
+        "Press \"a\" to add a new task, and \"q\" to quit the application."
+    )
+
     def __init__(
         self,
         app: Optional = None,
@@ -37,7 +43,7 @@ class ListTasksView:
         ]
 
         root_container = HSplit([
-            VSplit(status_containers), Label(text="Press stuff")
+            VSplit(status_containers), Label(text=self.HELP_TEXT)
         ])
 
         self.layout = Layout(root_container)

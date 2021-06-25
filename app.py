@@ -3,19 +3,19 @@ from typing import Optional
 
 from prompt_toolkit.application import Application
 
+from python_kanban.models import Todo
+from python_kanban.views.no_tasks_view import NoTasksView
 from python_kanban.views.add_task_view import AddTaskView
 from python_kanban.views.list_tasks_view import ListTasksView
 
 
 class TodoApplication(Application):
     def __init__(self):
-        # view = AddTaskView(app=self)
-        # super().__init__(
-            # layout=view.load_view(),
-            # key_bindings=view.load_key_bindings(),
-            # full_screen=True
-        # )
-        view = ListTasksView(app=self)
+        view = (
+            ListTasksView(app=self)
+            if Todo.select().count()
+            else NoTasksView(app=self)
+        )
         super().__init__(
             layout=view.load_view(),
             key_bindings=view.load_key_bindings(),
@@ -23,13 +23,19 @@ class TodoApplication(Application):
         )
 
     def load_add_task_view(self):
-        self.exit()
+        view = AddTaskView(app=self)
+        self.layout = view.layout
+        self.key_bindings = view.load_key_bindings()
 
     def load_list_tasks_view(
         self, initial_container_focus: Optional[int] = None
     ):
-        view = ListTasksView(
-            app=self, initial_container_focus=initial_container_focus
+        view = (
+            ListTasksView(
+                app=self, initial_container_focus=initial_container_focus
+            )
+            if Todo.select().count()
+            else NoTasksView(app=self)
         )
         self.layout = view.layout
         self.key_bindings = view.load_key_bindings()

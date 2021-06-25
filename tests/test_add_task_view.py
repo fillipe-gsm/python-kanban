@@ -8,7 +8,6 @@ from python_kanban.models import Todo
 
 def test_tab_should_focus_on_next_element():
     view = AddTaskView()
-    view.load_view()
 
     assert view.focused_element == 0
     assert view.layout.has_focus(view.focusable_elements[0])
@@ -24,7 +23,6 @@ def test_tab_should_focus_on_next_element():
 
 def test_backtab_should_focus_on_previous_element():
     view = AddTaskView()
-    view.load_view()
 
     assert view.focused_element == 0
     assert view.layout.has_focus(view.focusable_elements[0])
@@ -44,7 +42,6 @@ def test_add_button_validation_proceeds():
 
     mocked_app = Mock()
     view = AddTaskView(app=mocked_app)
-    view.load_view()
 
     assert Todo.select().count() == 0  # nothing on database yet
 
@@ -69,14 +66,13 @@ def test_add_button_validation_proceeds():
     assert todo.body == body
     assert todo.status == Todo.CHOICES[0][0]
 
-    mocked_app.load_list_view.assert_called_once()
+    mocked_app.load_list_tasks_view.assert_called_once()
 
 
 def test_add_button_validation_fails():
     """No todo is created"""
 
     view = AddTaskView()
-    view.load_view()
 
     assert Todo.select().count() == 0  # nothing on database yet
 
@@ -102,7 +98,6 @@ def test_cancel_button():
 
     mocked_app = Mock()
     view = AddTaskView(app=mocked_app)
-    view.load_view()
 
     # Get the cancel button and simulate a press
     cancel_button = next(
@@ -113,4 +108,4 @@ def test_cancel_button():
     )
     cancel_button.handler()
 
-    mocked_app.load_list_view.assert_called_once()
+    mocked_app.load_list_tasks_view.assert_called_once()

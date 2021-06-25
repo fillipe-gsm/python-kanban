@@ -19,6 +19,7 @@ from python_kanban.models import Todo
 class AddTaskView:
     def __init__(self, app: Optional = None):
         self.app = app
+        self.load_view()
 
     def load_view(self):
 
@@ -100,12 +101,14 @@ class AddTaskView:
         )
 
         if self.app:
-            self.app.load_list_view()
+            self.app.load_list_tasks_view()
 
     def _cancel(self):
-        """Main app should call `load_list_view` without creating anything"""
+        """
+        Main app should call `load_list_tasks_view` without creating anything
+        """
         if self.app:
-            self.app.load_list_view()
+            self.app.load_list_tasks_view()
 
 
 def _title_validator(text):

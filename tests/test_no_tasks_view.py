@@ -5,7 +5,7 @@ from python_kanban.views.no_tasks_view import NoTasksView
 
 
 def test_no_task_view_content():
-    view_layout = NoTasksView().load_view()
+    view_layout = NoTasksView().layout
 
     assert NoTasksView.MAIN_TEXT == view_layout.container.content.text()
 

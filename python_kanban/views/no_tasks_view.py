@@ -11,15 +11,17 @@ from prompt_toolkit.widgets import Label
 
 
 class NoTasksView:
-    MAIN_TEXT = "No tasks yet. Press \"a\" to create one or \"q\" to quit."
+    MAIN_TEXT = "No tasks yet. Press \"a\" to add one or \"q\" to quit."
 
     def __init__(self, app: Optional = None):
         self.app = app
+        self.load_view()
 
     def load_view(self):
         """Load main layout"""
         root_container = Label(self.MAIN_TEXT)
-        return Layout(root_container)
+        self.layout = Layout(root_container)
+        return self.layout
 
     def load_key_bindings(self):
         kb = KeyBindings()
