@@ -72,12 +72,6 @@ class AddTaskView:
     def load_key_bindings(self):
         kb = KeyBindings()
 
-        # This one is here just for testing purposes
-        # @kb.add("q")
-        # def exit(event) -> None:
-            # if self.app:
-                # self.app.exit()
-
         @kb.add(Keys.Tab)
         def next_item(event) -> None:
             self.focused_element = (

@@ -1,6 +1,4 @@
 """
-Contains the main view showing all todos by status, in which the user can
-navigate, promote, regress and delete the tasks.
 """
 from typing import List, Optional
 
@@ -48,25 +46,31 @@ class StatusContainer:
 
         @kb.add("k")
         @kb.add("up")
-        def _go_up(event) -> None:
+        def go_up(event):
             self.selected_line = (self.selected_line - 1) % len(self.entries)
 
         @kb.add("j")
         @kb.add("down")
-        def _go_down(event) -> None:
+        def go_down(event):
             self.selected_line = (self.selected_line + 1) % len(self.entries)
 
         @kb.add("p")
-        def _promote(event) -> None:
-            self.entries[self.selected_line].promote()
+        def promote(event):
+            todo = self.entries[self.selected_line]
+            todo.promote()
             if self.app:
-                self.app.load_list_view()
+                self.app.load_list_tasks_view(
+                    initial_container_focus=todo.status
+                )
 
         @kb.add("r")
-        def _regress(event) -> None:
-            self.entries[self.selected_line].regress()
+        def regress(event):
+            todo = self.entries[self.selected_line]
+            todo.regress()
             if self.app:
-                self.app.load_list_view()
+                self.app.load_list_tasks_view(
+                    initial_container_focus=todo.status
+                )
 
         return kb
 
