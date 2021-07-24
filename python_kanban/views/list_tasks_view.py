@@ -1,11 +1,13 @@
 """Main view where the user can see and manipulate existing tasks"""
 from typing import Optional
 
+from prompt_toolkit import HTML
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.keys import Keys
+from prompt_toolkit.layout.dimension import D
 from prompt_toolkit.layout.layout import Layout
-from prompt_toolkit.layout.containers import HSplit, VSplit, Window
-from prompt_toolkit.widgets import Label
+from prompt_toolkit.layout.containers import HSplit, VSplit
+from prompt_toolkit.widgets import Frame, Label
 
 from python_kanban.models import Todo
 from python_kanban.views.status_container_view import StatusContainer
@@ -15,7 +17,8 @@ class ListTasksView:
     HELP_TEXT = (
         "Navigate along tasks with h, j, k, l or usual navigation keys. "
         "Press \"p\" to promote a task and \"r\" to regress it. "
-        "Press \"a\" to add a new task, and \"q\" to quit the application."
+        "Press \"a\" to add a new task, and \"d\" to delete an existing one.\n"
+        "Finally, use \"q\" to quit the application."
     )
 
     def __init__(
@@ -32,12 +35,10 @@ class ListTasksView:
         todo_entries_dict = Todo.group_todos_per_status()
 
         status_containers = [
-            HSplit(
-                [
-                    Label(text=Todo.CHOICES[status][1]),
-                    Window(height=1, char="_", style="class:line"),
-                    StatusContainer(entries=todo_entries, app=self.app),
-                ]
+            Frame(
+                body=StatusContainer(entries=todo_entries, app=self.app),
+                title=HTML(f"<bold>{Todo.CHOICES[status][1]}</bold>"),
+                width=D(),
             )
             for status, todo_entries in todo_entries_dict.items()
         ]

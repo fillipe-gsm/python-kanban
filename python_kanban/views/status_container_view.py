@@ -25,8 +25,6 @@ class StatusContainer:
                 focusable=True,
                 key_bindings=self._get_key_bindings(),
             ),
-            style="class:select-box",
-            dont_extend_height=True,
             cursorline=True,
         )
         self.app = app

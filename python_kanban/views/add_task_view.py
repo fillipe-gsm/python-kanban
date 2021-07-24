@@ -46,7 +46,9 @@ class AddTaskView:
         self.focused_element = 0
         self.task_inputs = [title_buffer, body_buffer]
 
-        root_container = HSplit([title_row, body_row, buttons_row, help_text_row])
+        root_container = HSplit(
+            [title_row, body_row, buttons_row, help_text_row]
+        )
 
         self.layout = Layout(root_container)
         self._focus_on_element(0)
@@ -55,9 +57,10 @@ class AddTaskView:
 
     def _get_title_row(self):
         title_buffer = Buffer(
-            validator=Validator.from_callable(_title_validator)
+            validator=Validator.from_callable(_title_validator),
+            multiline=False,
         )
-        wrong_title = Condition(lambda: not title_buffer.validate())
+        wrong_title_filter = Condition(lambda: not title_buffer.validate())
         wrong_title_message = HTML(
             "<ansired>Title cannot be empty nor larger than "
             f"{Todo.title.max_length} characters</ansired>"
@@ -67,7 +70,7 @@ class AddTaskView:
                 Window(content=BufferControl(buffer=title_buffer)),
                 ConditionalContainer(
                     content=Label(wrong_title_message),
-                    filter=wrong_title,
+                    filter=wrong_title_filter,
                 ),
             ]
         )
