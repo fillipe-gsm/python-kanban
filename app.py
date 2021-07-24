@@ -6,6 +6,7 @@ from prompt_toolkit.application import Application
 from python_kanban.models import Todo
 from python_kanban.views.no_tasks_view import NoTasksView
 from python_kanban.views.add_task_view import AddTaskView
+from python_kanban.views.edit_tasks_view import EditTaskView
 from python_kanban.views.list_tasks_view import ListTasksView
 
 
@@ -24,6 +25,11 @@ class TodoApplication(Application):
 
     def load_add_task_view(self):
         view = AddTaskView(app=self)
+        self.layout = view.layout
+        self.key_bindings = view.load_key_bindings()
+
+    def load_edit_task_view(self, todo: Todo):
+        view = EditTaskView(app=self, todo=todo)
         self.layout = view.layout
         self.key_bindings = view.load_key_bindings()
 

@@ -80,7 +80,6 @@ class AddTaskView:
             body=VSplit(
                 [add_button, cancel_button], align="CENTER", padding=3
             ),
-            style="class:button-bar",
             height=3,
         )
 

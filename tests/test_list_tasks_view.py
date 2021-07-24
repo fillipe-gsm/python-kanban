@@ -4,7 +4,6 @@ from prompt_toolkit.key_binding.key_processor import KeyPress, KeyProcessor
 from prompt_toolkit.keys import Keys
 
 from python_kanban.views.list_tasks_view import ListTasksView
-from python_kanban.views.status_container_view import StatusContainer
 from python_kanban.models import Todo
 
 

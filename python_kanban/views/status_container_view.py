@@ -77,6 +77,12 @@ class StatusContainer:
             if self.app:
                 self.app.load_list_tasks_view()
 
+        @kb.add("e")
+        def edit_todo(event):
+            todo = self.entries[self.selected_line]
+            if self.app:
+                self.app.load_edit_task_view(todo=todo)
+
         return kb
 
     def __pt_container__(self):

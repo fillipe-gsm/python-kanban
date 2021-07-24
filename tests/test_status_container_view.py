@@ -1,4 +1,5 @@
 import pytest
+from mock import Mock
 from prompt_toolkit.key_binding.key_processor import KeyPress, KeyProcessor
 from prompt_toolkit.keys import Keys
 
@@ -103,3 +104,14 @@ def test_d_deletes_todo(todo_entries):
     todos = Todo.select()
     assert todos.count() == len(todo_entries) - 1
     assert todo_entries[0] not in todos
+
+
+def test_e_should_load_add_task_view(todo_entries):
+    mocked_app = Mock()
+    container = StatusContainer(todo_entries, app=mocked_app)
+
+    processor = KeyProcessor(container.container.get_key_bindings())
+    processor.feed(KeyPress("e"))
+    processor.process_keys()
+
+    mocked_app.load_edit_task_view.assert_called_once()
