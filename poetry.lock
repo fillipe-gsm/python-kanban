@@ -53,6 +53,23 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "dynaconf"
+version = "3.1.4"
+description = "The dynamic configurator for your Python Project"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+all = ["redis", "ruamel.yaml", "configobj", "hvac"]
+configobj = ["configobj"]
+ini = ["configobj"]
+redis = ["redis"]
+toml = ["toml"]
+vault = ["hvac"]
+yaml = ["ruamel.yaml"]
+
+[[package]]
 name = "importlib-metadata"
 version = "4.6.1"
 description = "Read metadata from Python packages"
@@ -351,7 +368,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "a89ea952d7fc742bce1d362def17e5dd99c8ddc4ccfaab9aae85a33d5ed4337f"
+content-hash = "9ad1b4056f4590a91b666dc7a6fc4dc1f6788407545acdaf4a233fbba76b7dea"
 
 [metadata.files]
 appnope = [
@@ -377,6 +394,10 @@ colorama = [
 decorator = [
     {file = "decorator-5.0.9-py3-none-any.whl", hash = "sha256:6e5c199c16f7a9f0e3a61a4a54b3d27e7dad0dbdde92b944426cb20914376323"},
     {file = "decorator-5.0.9.tar.gz", hash = "sha256:72ecfba4320a893c53f9706bebb2d55c270c1e51a28789361aa93e4a21319ed5"},
+]
+dynaconf = [
+    {file = "dynaconf-3.1.4-py2.py3-none-any.whl", hash = "sha256:e6f383b84150b70fc439c8b2757581a38a58d07962aa14517292dcce1a77e160"},
+    {file = "dynaconf-3.1.4.tar.gz", hash = "sha256:b2f472d83052f809c5925565b8a2ba76a103d5dc1dbb9748b693ed67212781b9"},
 ]
 importlib-metadata = [
     {file = "importlib_metadata-4.6.1-py3-none-any.whl", hash = "sha256:9f55f560e116f8643ecf2922d9cd3e1c7e8d52e683178fecd9d08f6aa357e11e"},

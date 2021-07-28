@@ -1,4 +1,4 @@
-"""Script to test my views visually"""
+"""Main app with the Kanban functionality"""
 from typing import Optional
 
 from prompt_toolkit.application import Application
@@ -10,7 +10,11 @@ from python_kanban.views.edit_tasks_view import EditTaskView
 from python_kanban.views.list_tasks_view import ListTasksView
 
 
-class TodoApplication(Application):
+class KanbanApplication(Application):
+    """
+    The main idea of the app is to change layouts depending on the functions
+    called by internal views.
+    """
     def __init__(self):
         view = (
             ListTasksView(app=self)
@@ -45,8 +49,3 @@ class TodoApplication(Application):
         )
         self.layout = view.layout
         self.key_bindings = view.load_key_bindings()
-
-
-if __name__ == "__main__":
-    application = TodoApplication()
-    application.run()

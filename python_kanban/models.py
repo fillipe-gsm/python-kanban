@@ -3,8 +3,7 @@ from typing import Dict, List
 
 import peewee as pw
 
-
-db = pw.SqliteDatabase("kanban.db")
+from main import db
 
 
 class Todo(pw.Model):
