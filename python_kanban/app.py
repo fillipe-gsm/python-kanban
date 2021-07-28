@@ -15,6 +15,7 @@ class KanbanApplication(Application):
     The main idea of the app is to change layouts depending on the functions
     called by internal views.
     """
+
     def __init__(self):
         view = (
             ListTasksView(app=self)

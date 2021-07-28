@@ -39,7 +39,11 @@ class StatusContainer:
 
         return merge_formatted_text(result)
 
-    def _get_key_bindings(self):
+    def _get_key_bindings(self):  # noqa
+        """
+        Set #noqa to prevent flake8 from calling this function 'too complex'.
+        It should actually contain all keybindings here.
+        """
         kb = KeyBindings()
 
         @kb.add("k")
