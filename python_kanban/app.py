@@ -48,5 +48,9 @@ class KanbanApplication(Application):
             if Todo.select().count()
             else NoTasksView(app=self)
         )
-        self.layout = view.layout
-        self.key_bindings = view.load_key_bindings()
+
+        # FIXME: Mypy went nuts here and said `view` has not `layout` nor
+        # `load_key_bindings`, which is clearly wrong. I looked everywhere but
+        # found no solution, so I'll simply ask it to ignore it for now
+        self.layout = view.layout  # type: ignore
+        self.key_bindings = view.load_key_bindings()  # type: ignore

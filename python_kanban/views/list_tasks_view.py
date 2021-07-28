@@ -1,5 +1,5 @@
 """Main view where the user can see and manipulate existing tasks"""
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from prompt_toolkit import HTML
 from prompt_toolkit.key_binding import KeyBindings
@@ -13,6 +13,11 @@ from python_kanban.models import Todo
 from python_kanban.views.status_container_view import StatusContainer
 
 
+if TYPE_CHECKING:
+    # Import here to prevent a circular import
+    from python_kanban.app import KanbanApplication
+
+
 class ListTasksView:
     HELP_TEXT = (
         "Navigate along tasks with h, j, k, l or usual navigation keys. "
@@ -23,7 +28,7 @@ class ListTasksView:
 
     def __init__(
         self,
-        app: Optional = None,
+        app: Optional["KanbanApplication"] = None,
         initial_container_focus: Optional[int] = None
     ):
         self.app = app

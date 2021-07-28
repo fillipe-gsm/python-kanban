@@ -2,7 +2,7 @@
 View to see details and edit a task. It is similar to `AddTaskView`, but with
 more info.
 """
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from prompt_toolkit.layout.containers import HSplit, VSplit
 from prompt_toolkit.layout.layout import Layout
@@ -12,8 +12,13 @@ from python_kanban.models import Todo
 from prompt_toolkit.widgets import Box, Button, Label
 
 
+if TYPE_CHECKING:
+    # Import here to prevent a circular import
+    from python_kanban.app import KanbanApplication
+
+
 class EditTaskView(AddTaskView):
-    def __init__(self, todo: Todo, app: Optional = None):
+    def __init__(self, todo: Todo, app: Optional["KanbanApplication"] = None):
         self.app = app
         self.todo = todo
         self.load_view()

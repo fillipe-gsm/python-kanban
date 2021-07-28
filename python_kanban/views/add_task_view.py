@@ -1,5 +1,5 @@
 """This view is used to create a new task"""
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from prompt_toolkit import HTML
 from prompt_toolkit.buffer import Buffer
@@ -19,10 +19,15 @@ from prompt_toolkit.filters import Condition
 from python_kanban.models import Todo
 
 
+if TYPE_CHECKING:
+    # Import here to prevent a circular import
+    from python_kanban.app import KanbanApplication
+
+
 class AddTaskView:
     HELP_TEXT = "Press `Tab` to move the focus"
 
-    def __init__(self, app: Optional = None):
+    def __init__(self, app: Optional["KanbanApplication"] = None):
         self.app = app
         self.load_view()
 
@@ -85,9 +90,6 @@ class AddTaskView:
 
     def _get_help_text_row(self):
         return Label(text=self.HELP_TEXT)
-
-    def _focus_on_element(self, index: int):
-        self.layout.focus(self.focusable_elements[index])
 
     def load_key_bindings(self):
         """Use built-in functions to rotate between focusable elements."""

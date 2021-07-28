@@ -1,6 +1,6 @@
 """
 """
-from typing import List, Optional
+from typing import List, Optional, TYPE_CHECKING
 
 from prompt_toolkit.formatted_text import merge_formatted_text
 from prompt_toolkit.key_binding import KeyBindings
@@ -11,11 +11,16 @@ from prompt_toolkit.layout.controls import FormattedTextControl
 from python_kanban.models import Todo
 
 
+if TYPE_CHECKING:
+    # Import here to prevent a circular import
+    from python_kanban.app import KanbanApplication
+
+
 class StatusContainer:
     """A widget-like container for the todos with a given status"""
 
     def __init__(
-        self, entries: List[Todo], app: Optional = None
+        self, entries: List[Todo], app: Optional["KanbanApplication"] = None
     ):
         self.entries = entries
         self.selected_line = 0

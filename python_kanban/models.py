@@ -41,7 +41,9 @@ class Todo(pw.Model):
     @classmethod
     def group_todos_per_status(cls) -> Dict[int, List["Todo"]]:
         todos = Todo.select().order_by(Todo.updated.desc())
-        todos_dict = {status: [] for status, _ in cls.CHOICES}
+        todos_dict: Dict[int, List["Todo"]] = {
+            status: [] for status, _ in cls.CHOICES
+        }
         for todo in todos:
             todos_dict[todo.status].append(todo)
         return todos_dict
