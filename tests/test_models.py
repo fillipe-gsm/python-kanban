@@ -12,6 +12,13 @@ def test_check_todo_defaults():
     assert todo.status == todo.CHOICES[0][0]
 
 
+def test_check_str():
+    title = "Thing to do"
+    todo = Todo.create(title=title)
+
+    assert todo.__str__() == title
+
+
 class TestPromote:
     def test_promote_increases_todo_status(self):
         todo = Todo.create(title="Thing to do")

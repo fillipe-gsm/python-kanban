@@ -33,4 +33,10 @@ python_kanban = "main:run_app"
 omit = [
     "./config.py",
     "./main.py",
+    "./python_kanban/app.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "from python_kanban.app import KanbanApplication",
 ]
