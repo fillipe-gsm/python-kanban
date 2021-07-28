@@ -18,7 +18,7 @@ jedi = "<0.18"
 mock = "^4.0.3"
 autopep8 = "^1.5.7"
 flake8 = "^3.9.2"
-pytest-cov = "^2.12.1"
+pytest-cov = {extras = ["toml"], version = "^2.12.1"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -26,3 +26,9 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 python_kanban = "main:run_app"
+
+[tool.coverage.run]
+omit = [
+    "./config.py",
+    "./main.py",
+]
