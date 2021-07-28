@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "python-kanban"
 version = "0.1.0"
-description = "Kanban board in command line"
+description = "Text based interface for Kanban board"
 authors = ["Fillipe Goulart <fillipe.gsm@tutanota.com>"]
 
 [tool.poetry.dependencies]
@@ -20,3 +20,6 @@ mock = "^4.0.3"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+python_kanban = "main:run_app"
