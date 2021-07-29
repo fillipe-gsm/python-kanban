@@ -2,8 +2,12 @@ from datetime import datetime
 from typing import Dict, List
 
 import peewee as pw
+from dynaconf import settings
 
-from main import db
+
+db = pw.SqliteDatabase(
+    settings.DB_FILE if "DB_FILE" in settings else "kanban.db"
+)
 
 
 class Todo(pw.Model):

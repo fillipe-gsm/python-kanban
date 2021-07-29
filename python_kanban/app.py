@@ -54,3 +54,11 @@ class KanbanApplication(Application):
         # found no solution, so I'll simply ask it to ignore it for now
         self.layout = view.layout  # type: ignore
         self.key_bindings = view.load_key_bindings()  # type: ignore
+
+
+def run_app():
+    from python_kanban.models import db
+
+    db.create_tables([Todo])
+    application = KanbanApplication()
+    application.run()

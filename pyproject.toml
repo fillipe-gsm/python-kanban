@@ -27,7 +27,7 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-python_kanban = "main:run_app"
+python_kanban = "python_kanban.app:run_app"
 
 [tool.coverage.run]
 omit = [
