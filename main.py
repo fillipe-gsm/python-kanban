@@ -2,7 +2,9 @@ import peewee as pw
 from dynaconf import settings
 
 
-db = pw.SqliteDatabase(settings.DB_FILE or "kanban.db")
+db = pw.SqliteDatabase(
+    settings.DB_FILE if "DB_FILE" in settings else "kanban.db"
+)
 
 
 def run_app():
