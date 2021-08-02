@@ -7,6 +7,7 @@ from python_kanban.models import Todo
 from python_kanban.views.no_tasks_view import NoTasksView
 from python_kanban.views.add_task_view import AddTaskView
 from python_kanban.views.edit_tasks_view import EditTaskView
+from python_kanban.views.delete_task_view import DeleteTaskView
 from python_kanban.views.list_tasks_view import ListTasksView
 
 
@@ -54,6 +55,11 @@ class KanbanApplication(Application):
         # found no solution, so I'll simply ask it to ignore it for now
         self.layout = view.layout  # type: ignore
         self.key_bindings = view.load_key_bindings()  # type: ignore
+
+    def load_delete_task_view(self, todo=Todo):
+        view = DeleteTaskView(app=self, todo=todo)
+        self.layout = view.layout
+        self.key_bindings = view.load_key_bindings()
 
 
 def run_app():

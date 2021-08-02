@@ -82,9 +82,8 @@ class StatusContainer:
         @kb.add("d")
         def delete(event):
             todo = self.entries[self.selected_line]
-            todo.delete_instance()
             if self.app:
-                self.app.load_list_tasks_view()
+                self.app.load_delete_task_view(todo=todo)
 
         @kb.add("e")
         def edit_todo(event):

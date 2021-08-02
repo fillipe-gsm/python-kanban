@@ -90,20 +90,15 @@ def test_status_container_regress_todo(todo_entries):
     assert container.entries[2].status == Todo.CHOICES[0][0]
 
 
-def test_d_deletes_todo(todo_entries):
+def test_d_should_load_delete_view(todo_entries):
+    mocked_app = Mock()
+    container = StatusContainer(todo_entries, app=mocked_app)
 
-    container = StatusContainer(todo_entries)
-
-    assert Todo.select().count() == len(todo_entries)
-
-    # Delete first task
     processor = KeyProcessor(container.container.get_key_bindings())
     processor.feed(KeyPress("d"))
     processor.process_keys()
 
-    todos = Todo.select()
-    assert todos.count() == len(todo_entries) - 1
-    assert todo_entries[0] not in todos
+    mocked_app.load_delete_task_view.assert_called_once()
 
 
 def test_e_should_load_add_task_view(todo_entries):
