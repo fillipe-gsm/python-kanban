@@ -4,12 +4,6 @@ from prompt_toolkit.key_binding.key_processor import KeyPress, KeyProcessor
 from python_kanban.views.no_tasks_view import NoTasksView
 
 
-def test_no_task_view_content():
-    view_layout = NoTasksView().layout
-
-    assert NoTasksView.MAIN_TEXT == view_layout.container.content.text()
-
-
 def test_keybinding_add_task():
     """
     When 'a' is pressed, it should trigger the main app to load the 'add task

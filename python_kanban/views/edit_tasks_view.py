@@ -25,13 +25,21 @@ class EditTaskView(AddTaskView):
 
     def load_view(self):
         title_row = self._get_title_row()
+        category_row = self._get_category_row()
         body_row = self._get_body_row()
         buttons_row = self._get_buttons_row()
         info_row = self._get_info_row()
         help_text_row = self._get_help_text_row()
 
         root_container = HSplit(
-            [title_row, body_row, buttons_row, info_row, help_text_row]
+            [
+                title_row,
+                category_row,
+                body_row,
+                buttons_row,
+                info_row,
+                help_text_row
+            ]
         )
 
         self.layout = Layout(root_container, focused_element=title_row)
@@ -64,17 +72,25 @@ class EditTaskView(AddTaskView):
 
     def _populate_fields(self):
         self.title_buffer.text = self.todo.title
+        self.category_buffer.text = (
+            self.todo.category.name
+            if self.todo.category
+            else ""
+        )
         self.body_buffer.text = self.todo.body
 
     def _update(self):
         """Validate the inputs, save the edited Todo and load the list view"""
-        if not self.title_buffer.validate():
+        if not self._is_valid_form():
             return
 
         # If everything is o.k., update the todo
-        self.todo.title = self.title_buffer.text
-        self.todo.body = self.body_buffer.text
-        self.todo.save()
+        Todo.update_todo_with_category(
+            todo=self.todo,
+            title=self.title_buffer.text,
+            body=self.body_buffer.text,
+            category_name=self.category_buffer.text,
+        )
 
         if self.app:
             self.app.load_list_tasks_view()

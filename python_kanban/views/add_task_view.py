@@ -16,7 +16,7 @@ from prompt_toolkit.validation import Validator
 from prompt_toolkit.widgets import Box, Button, Frame, Label
 from prompt_toolkit.filters import Condition
 
-from python_kanban.models import Todo
+from python_kanban.models import Category, Todo
 
 
 if TYPE_CHECKING:
@@ -36,12 +36,13 @@ class AddTaskView:
 
     def load_view(self):
         title_row = self._get_title_row()
+        category_row = self._get_category_row()
         body_row = self._get_body_row()
         buttons_row = self._get_buttons_row()
         help_text_row = self._get_help_text_row()
 
         root_container = HSplit(
-            [title_row, body_row, buttons_row, help_text_row]
+            [title_row, category_row, body_row, buttons_row, help_text_row]
         )
 
         self.layout = Layout(root_container, focused_element=title_row)
@@ -71,6 +72,30 @@ class AddTaskView:
         )
 
         return Frame(title="Title*", body=title_body, height=5)
+
+    def _get_category_row(self):
+        self.category_buffer = Buffer(
+            validator=Validator.from_callable(_category_validator),
+            multiline=False,
+        )
+        wrong_category_filter = Condition(
+            lambda: not self.category_buffer.validate()
+        )
+        wrong_category_message = HTML(
+            "<ansired>Category cannot be larger than "
+            f"{Category.name.max_length} characters</ansired>"
+        )
+        category_body = HSplit(
+            [
+                Window(content=BufferControl(buffer=self.category_buffer)),
+                ConditionalContainer(
+                    content=Label(wrong_category_message),
+                    filter=wrong_category_filter,
+                ),
+            ]
+        )
+
+        return Frame(title="Category", body=category_body, height=5)
 
     def _get_body_row(self):
         self.body_buffer = Buffer()
@@ -104,14 +129,22 @@ class AddTaskView:
 
     def _add(self):
         """Validate the inputs, save the Todo and load the list view"""
-        if not self.title_buffer.validate():
+        if not self._is_valid_form():
             return
 
         # If everything is o.k., create a new Todo
-        Todo.create(title=self.title_buffer.text, body=self.body_buffer.text)
+        Todo.create_todo_with_category(
+            title=self.title_buffer.text,
+            body=self.body_buffer.text,
+            category_name=self.category_buffer.text,
+        )
 
         if self.app:
             self.app.load_list_tasks_view()
+
+    def _is_valid_form(self):
+        """Return `True` if all required buffers are valid"""
+        return self.title_buffer.validate() and self.category_buffer.validate()
 
     def _cancel(self):
         """
@@ -123,3 +156,7 @@ class AddTaskView:
 
 def _title_validator(text):
     return 0 < len(text) <= Todo.title.max_length
+
+
+def _category_validator(text):
+    return len(text) <= Category.name.max_length

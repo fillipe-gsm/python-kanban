@@ -3,7 +3,7 @@ from typing import Optional
 
 from prompt_toolkit.application import Application
 
-from python_kanban.models import Todo
+from python_kanban.models import Category, Todo
 from python_kanban.views.no_tasks_view import NoTasksView
 from python_kanban.views.add_task_view import AddTaskView
 from python_kanban.views.edit_tasks_view import EditTaskView
@@ -65,6 +65,6 @@ class KanbanApplication(Application):
 def run_app():
     from python_kanban.models import db
 
-    db.create_tables([Todo])
+    db.create_tables([Category, Todo])
     application = KanbanApplication()
     application.run()

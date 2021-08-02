@@ -2,6 +2,7 @@
 """
 from typing import List, Optional, TYPE_CHECKING
 
+from prompt_toolkit import HTML
 from prompt_toolkit.formatted_text import merge_formatted_text
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout.containers import Window
@@ -39,6 +40,13 @@ class StatusContainer:
         for i, entry in enumerate(self.entries):
             if i == self.selected_line:
                 result.append([("[SetCursorPosition]", "")])
+
+            category_name = HTML(
+                f"[<bold>{entry.category.name}</bold>] "
+                if entry.category
+                else ""
+            )
+            result.append(category_name)
             result.append(entry.title)
             result.append("\n")
 

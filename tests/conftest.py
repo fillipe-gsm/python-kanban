@@ -1,11 +1,11 @@
 import peewee as pw
 import pytest
 
-from python_kanban.models import Todo
+from python_kanban.models import Category, Todo
 
 
 test_db = pw.SqliteDatabase(":memory:")
-MODELS = (Todo,)
+MODELS = (Category, Todo)
 
 
 @pytest.fixture(scope="function", autouse=True)
