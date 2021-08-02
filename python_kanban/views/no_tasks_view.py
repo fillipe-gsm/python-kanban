@@ -7,7 +7,7 @@ from typing import Optional, TYPE_CHECKING
 
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout.layout import Layout
-from prompt_toolkit.widgets import Label
+from prompt_toolkit.widgets import Box, Label
 
 
 if TYPE_CHECKING:
@@ -24,7 +24,9 @@ class NoTasksView:
 
     def load_view(self):
         """Load main layout"""
-        root_container = Label(self.MAIN_TEXT)
+        root_container = Box(
+            body=Label(self.MAIN_TEXT, dont_extend_width=True),
+        )
         self.layout = Layout(root_container)
         return self.layout
 
