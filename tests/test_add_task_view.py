@@ -1,5 +1,8 @@
 from mock import Mock
 
+from prompt_toolkit.key_binding.key_processor import KeyPress, KeyProcessor
+from prompt_toolkit.keys import Keys
+
 from python_kanban.views.add_task_view import AddTaskView
 from python_kanban.models import Todo
 
@@ -53,5 +56,16 @@ def test_cancel_button():
     view = AddTaskView(app=mocked_app)
 
     view._cancel()  # call the `cancel` button handler
+
+    mocked_app.load_list_tasks_view.assert_called_once()
+
+
+def test_escape_cancels():
+    mocked_app = Mock()
+    view = AddTaskView(app=mocked_app)
+
+    processor = KeyProcessor(view.load_key_bindings())
+    processor.feed(KeyPress(Keys.Escape))
+    processor.process_keys()
 
     mocked_app.load_list_tasks_view.assert_called_once()

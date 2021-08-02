@@ -25,7 +25,10 @@ if TYPE_CHECKING:
 
 
 class AddTaskView:
-    HELP_TEXT = "Press `Tab` to move the focus"
+    HELP_TEXT = (
+        "Press `Tab` to move the focus. "
+        "Shortcut: Hit \"Esc\" to leave without adding a task."
+    )
 
     def __init__(self, app: Optional["KanbanApplication"] = None):
         self.app = app
@@ -96,6 +99,7 @@ class AddTaskView:
         kb = KeyBindings()
         kb.add("tab")(focus_next)
         kb.add("s-tab")(focus_previous)
+        kb.add("escape")(lambda event: self._cancel())
         return kb
 
     def _add(self):
