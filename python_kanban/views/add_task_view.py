@@ -3,6 +3,7 @@ from typing import Optional, TYPE_CHECKING
 
 from prompt_toolkit import HTML
 from prompt_toolkit.buffer import Buffer
+from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.key_binding.bindings.focus import (
     focus_next, focus_previous
@@ -74,9 +75,15 @@ class AddTaskView:
         return Frame(title="Title*", body=title_body, height=5)
 
     def _get_category_row(self):
+        category_names = [
+            category.name for category in Category.select(Category.name)
+        ]
+        category_completer = WordCompleter(category_names)
         self.category_buffer = Buffer(
             validator=Validator.from_callable(_category_validator),
             multiline=False,
+            completer=category_completer,
+            complete_while_typing=True,
         )
         wrong_category_filter = Condition(
             lambda: not self.category_buffer.validate()
