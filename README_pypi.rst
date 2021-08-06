@@ -40,3 +40,5 @@ and it will either create another ``another_database_file.db`` file or load it
 if already existing.
 
 This is still a work in progress, the looks may be rough in the edges, but most of the main functionality is there already.
+
+Check the `repository page <https://github.com/fillipe-gsm/python-kanban>`_ for more information.

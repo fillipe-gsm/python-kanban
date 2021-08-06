@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-kanban"
-version = "0.1.0"
+version = "0.2.0"
 description = "Text-based interface for a Kanban board in pure Python"
 readme = "README_pypi.rst"
 authors = ["Fillipe Goulart <fillipe.gsm@tutanota.com>"]
