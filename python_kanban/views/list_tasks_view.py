@@ -20,9 +20,10 @@ if TYPE_CHECKING:
 
 class ListTasksView:
     HELP_TEXT = (
-        "Navigate along tasks with h, j, k, l or usual navigation keys. "
+        "Navigate along tasks with h, j, k, l or usual navigation keys.\n"
         "Press \"p\" to promote a task and \"r\" to regress it. "
-        "Press \"a\" to add a new task, and \"d\" to delete an existing one.\n"
+        "Press \"a\" to add a new task, \"e\" to view/edit an existing one, "
+        "and \"d\" to delete it.\n"
         "Finally, use \"q\" to quit the application."
     )
 
